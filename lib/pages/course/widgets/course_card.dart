@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:peer_instruction_student/utils/datetime_formatter.dart';
 
 class CourseCard extends StatelessWidget {
-  const CourseCard({super.key, required this.courseId, required this.imageUrl, required this.courseName, required this.attendTime, required this.teacherAvatar, required this.teacherName, this.onTap});
+  const CourseCard({super.key, required this.courseId, required this.imageUrl, required this.courseName, required this.joinTime, required this.teacherAvatar, required this.teacherName, this.onTap});
 
   final int courseId;
   final String imageUrl;
   final String courseName;
-  final DateTime attendTime;
+  final DateTime joinTime;
   final String teacherAvatar;
   final String teacherName;
   final void Function()? onTap;
@@ -26,16 +27,19 @@ class CourseCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10)
               ),
               clipBehavior: Clip.antiAlias,
-              child: Image.network(
-                imageUrl,
-                scale: 16/9,
-                fit: BoxFit.cover,
+              child: AspectRatio(
+                aspectRatio: 16/9,
+                child: Image.network(
+                  imageUrl,
+                  scale: 16/9,
+                  fit: BoxFit.cover,
+                ),
               )
             ),
             const SizedBox(height: 16),
             Row(
               children: [
-                Text('于 ${attendTime.year}-${attendTime.month}-${attendTime.day} 加入',
+                Text('于 ${DatetimeFormatter.format(joinTime, FormatterType.accordingNow)} 加入',
                   style: const TextStyle(
                     fontSize: 14, 
                     fontWeight: FontWeight.w500,

@@ -1,17 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:peer_instruction_student/apis/course_api.dart';
+import 'package:peer_instruction_student/models/course/course.dart';
 import 'package:peer_instruction_student/pages/course/widgets/course_card.dart';
 
-class CoursePage extends StatelessWidget {
+class CoursePage extends StatefulWidget {
   const CoursePage({super.key});
 
+  @override
+  State<CoursePage> createState() => _CoursePageState();
+}
+
+class _CoursePageState extends State<CoursePage> {
   Future<void> _refreshCourseList() async {
-    // 这里执行数据刷新的操作，例如网络请求
-    await Future.delayed(const Duration(seconds: 2)); // 模拟数据加载
-    // 数据刷新完毕，返回
+    var res = await CourseApi().getAllCourses();
+    setState(() {
+      _courses = res.courses;
+    });
+  }
+
+  List<Course> _courses = [];
+
+  @override
+  void initState() {
+    _refreshCourseList();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: _refreshCourseList,
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            title: const Text('课程'),
+            backgroundColor: const Color(0xFF4C6ED7),
+      
+          ),
+          SliverList.builder(
+            itemCount: _courses.length,
+            itemBuilder: (context, index) {
+                return CourseCard(
+                  courseId: _courses[index].courseId,
+                  imageUrl: _courses[index].courseImageUrl, 
+                  courseName: _courses[index].courseName, 
+                  joinTime: _courses[index].joinTime, 
+                  teacherAvatar: _courses[index].teacher.teacherAvatar, 
+                  teacherName: _courses[index].teacher.teacherName,
+                  onTap: () {},
+                );
+            }
+          )
+        ],
+      ),
+    );
+
     return Column(
       children: [
         AppBar(
@@ -33,15 +76,7 @@ class CoursePage extends StatelessWidget {
             child: ListView.builder(
               itemCount: 30,
               itemBuilder: (context, index) {
-                return CourseCard(
-                  courseId: index,
-                  imageUrl: 'https://img0.baidu.com/it/u=3543009939,2144310597&fm=253&fmt=auto&app=138&f=JPEG?w=704&h=500', 
-                  courseName: '卓越工程综合训练$index', 
-                  attendTime: DateTime.now(), 
-                  teacherAvatar: 'https://img1.baidu.com/it/u=1653751609,236581088&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=500', 
-                  teacherName: '车海莺',
-                  onTap: () {},
-                );
+                
               }
             )
           )
