@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "peer_instruction_student" "\0"
+            VALUE "CompanyName", "com.wyt" "\0"
+            VALUE "FileDescription", "同伴课堂学生端" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "peer_instruction_student" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 com.wyt. All rights reserved." "\0"
             VALUE "OriginalFilename", "peer_instruction_student.exe" "\0"
-            VALUE "ProductName", "peer_instruction_student" "\0"
+            VALUE "ProductName", "同伴课堂学生端" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

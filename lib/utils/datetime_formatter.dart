@@ -1,15 +1,14 @@
 enum FormatterType {
   accordingNow,
+  dateAndTime,
 }
 
 class DatetimeFormatter {
-
-
   static String format(DateTime dateTime, FormatterType type) {
-    switch(type) {
+    switch (type) {
       case FormatterType.accordingNow:
         Duration difference = DateTime.now().difference(dateTime);
-        if(difference.inDays >= 1) {
+        if (difference.inDays >= 1) {
           return '${dateTime.year}-${dateTime.month}-${dateTime.day}';
         } else if (difference.inHours >= 1) {
           return '${difference.inHours}小时前';
@@ -18,6 +17,8 @@ class DatetimeFormatter {
         } else {
           return '刚刚';
         }
+      case FormatterType.dateAndTime:
+        return '${dateTime.year}-${dateTime.month}-${dateTime.day} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}';
     }
   }
 }

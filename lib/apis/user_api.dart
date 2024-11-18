@@ -1,3 +1,4 @@
+import 'package:peer_instruction_student/common/global.dart';
 import 'package:peer_instruction_student/models/result.dart';
 import 'package:peer_instruction_student/models/user/user.dart';
 import 'package:peer_instruction_student/utils/base_request.dart';
@@ -20,13 +21,18 @@ class UserApi {
   //   return res;
   // }
   Future<bool> modifyUserInfo({String? name, String? avatar, String? password}) async {
+    var userId = Global.user.userId;
     var json = await BaseRequest().request(
-      "/students/1",
+      "/students/${userId ?? 0}",
       method: RequestMethod.put,
-      data: {name, avatar, password}
+      data: {
+        "name": name,
+        "avatar": avatar,
+        "password": password
+      }
     );
-    var res = Result<Null>.fromJson(json, (json) => null).isSuccess;
-    return res;
+    var res = Result<Null>.fromJson(json, (json) => null);
+    return res.isSuccess;
   }
 
   Future<Result<User>> login(String email, String password) async {

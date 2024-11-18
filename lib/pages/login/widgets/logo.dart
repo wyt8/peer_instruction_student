@@ -13,20 +13,19 @@ class Logo extends StatelessWidget {
             child: Image.asset('assets/imgs/logo.png')),
         const SizedBox(height: 10),
         const Text(
-          '同伴教学法支持平台',
+          '同伴课堂学生端',
           style: TextStyle(
-              fontSize: 24,
-              color: Color(0xff181818),
-              fontWeight: FontWeight.normal,
-              height: 34 / 24),
+              fontSize: 26,
+              color: Color(0xff2e3192),
+              fontWeight: FontWeight.w700),
         ),
+        const SizedBox(height: 10),
         const Text(
-          '学生端',
+          '同伴教学法支撑平台',
           style: TextStyle(
-              fontSize: 24,
+              fontSize: 18,
               color: Color(0xff181818),
-              fontWeight: FontWeight.normal,
-              height: 34 / 24),
+              fontWeight: FontWeight.normal),
         )
       ],
     );

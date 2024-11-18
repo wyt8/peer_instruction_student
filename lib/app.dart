@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:peer_instruction_student/common/global.dart';
+import 'package:peer_instruction_student/pages/class/class_page.dart';
+import 'package:peer_instruction_student/pages/class/exercise_page.dart';
+import 'package:peer_instruction_student/pages/course/course_list_page.dart';
 import 'package:peer_instruction_student/pages/course/course_page.dart';
+import 'package:peer_instruction_student/pages/discussion/discussion_page.dart';
 import 'package:peer_instruction_student/pages/login/forget_password_page.dart';
 import 'package:peer_instruction_student/pages/login/login_page.dart';
 import 'package:peer_instruction_student/pages/login/register_page.dart';
@@ -50,16 +54,16 @@ class PeerInstructionStudentApp extends StatelessWidget {
 
   final _router = GoRouter(
       initialLocation: "/course",
-      redirect: (context, state) {
-        if (!Global.isLogin) {
-          return "/login";
-        } else {
-          return null;
-        }
-      },
       navigatorKey: _rootNavigatorKey,
       routes: [
         StatefulShellRoute.indexedStack(
+          redirect: (context, state) {
+            if (!Global.isLogin) {
+              return "/login";
+            } else {
+              return null;
+            }
+          },
           builder: (context, state, navigationShell) {
             return ScaffoldWithNavbar(navigationShell);
           },
@@ -69,7 +73,7 @@ class PeerInstructionStudentApp extends StatelessWidget {
               routes: [
                 GoRoute(
                     path: "/course",
-                    builder: (context, state) => const CoursePage()),
+                    builder: (context, state) => const CourseListPage()),
               ],
             ),
             StatefulShellBranch(
@@ -97,6 +101,56 @@ class PeerInstructionStudentApp extends StatelessWidget {
         GoRoute(
             path: "/forget_password",
             builder: (context, state) => const ForgetPasswordPage()),
+        GoRoute(
+          redirect: (context, state) {
+            if (!Global.isLogin) {
+              return "/login";
+            } else {
+              return null;
+            }
+          },
+          path: "/course/:course_id",
+          builder: (context, state) => CoursePage(
+              courseId: int.parse(state.pathParameters['course_id']!),
+              courseName:
+                  (state.extra! as Map<String, dynamic>)['course_name']!,
+              courseImageUrl:
+                  (state.extra! as Map<String, dynamic>)['course_image_url']!),
+          routes: [
+            GoRoute(
+              path: "discussion/:discussion_id",
+              builder: (context, state) => DiscussionPage(
+                courseId: int.parse(state.pathParameters['course_id']!),
+                discussionId: int.parse(state.pathParameters['discussion_id']!),
+                discussionTitle:
+                    (state.extra! as Map<String, dynamic>)['discussion_title']!,
+                discussionContent: (state.extra!
+                    as Map<String, dynamic>)['discussion_content']!,
+                createdTime:
+                    (state.extra! as Map<String, dynamic>)['created_time']!,
+                posterAvatar:
+                    (state.extra! as Map<String, dynamic>)['poster_avatar']!,
+                posterName:
+                    (state.extra! as Map<String, dynamic>)['poster_name']!,
+              ),
+            ),
+            GoRoute(
+                path: "class/:class_id",
+                builder: (context, state) => ClassPage(
+                      courseId: int.parse(state.pathParameters['course_id']!),
+                      classId: int.parse(state.pathParameters['class_id']!),
+                    ))
+          ],
+        ),
+        GoRoute(path: '/exercise/:exercise_id', builder: (context, state) => ExercisePage(
+          exerciseId: int.parse(state.pathParameters['exercise_id']!),
+          index: (state.extra! as Map<String, dynamic>)['index']!,
+          time: (state.extra! as Map<String, dynamic>)['time']!,
+          exerciseContent: (state.extra! as Map<String, dynamic>)['exercise_content']!,
+          exerciseOptions: (state.extra! as Map<String, dynamic>)['exercise_options']!,
+          myOption: (state.extra! as Map<String, dynamic>)['my_option'],
+          rightOption: (state.extra! as Map<String, dynamic>)['right_option'],
+        ))
       ]);
 
   @override
@@ -107,11 +161,13 @@ class PeerInstructionStudentApp extends StatelessWidget {
       ],
       child: ToastificationWrapper(
         child: MaterialApp.router(
-          title: "同伴教学法支撑平台学生端",
+          title: "同伴课堂",
           routerConfig: _router,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue)),
+              fontFamily: "Alibaba_PuHuiTi",
+              colorScheme:
+                  ColorScheme.fromSeed(seedColor: const Color(0xFF4C6ED7))),
         ),
       ),
     );

@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:peer_instruction_student/common/global.dart';
+import 'package:toastification/toastification.dart';
 
 enum RequestMethod { get, post, put, delete, patch, head }
 
@@ -15,7 +17,8 @@ class BaseRequest {
 
   static Dio _dio = Dio();
 
-  static const String _baseUrl = "http://127.0.0.1:4523/m1/5331430-5002107-default";
+  static const String _baseUrl =
+      "https://apifoxmock.com/m1/5331430-5002107-default";
 
   BaseRequest._internal() {
     BaseOptions options = BaseOptions(
@@ -34,8 +37,9 @@ class BaseRequest {
 
   /// 请求拦截器
   void _onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    if(Global.isLogin) {
-      options.headers[HttpHeaders.authorizationHeader] = "Bearer ${Global.user.token}";
+    if (Global.isLogin) {
+      options.headers[HttpHeaders.authorizationHeader] =
+          "Bearer ${Global.user.token}";
     }
     handler.next(options);
   }
@@ -47,7 +51,14 @@ class BaseRequest {
 
   /// 错误处理
   void _onError(DioException error, ErrorInterceptorHandler handler) {
-    handler.next(error);
+    toastification.show(
+      showProgressBar: false,
+      autoCloseDuration: const Duration(seconds: 3),
+      alignment: Alignment.topCenter,
+      title: const Text('网络连接错误'),
+      type: ToastificationType.error,
+    );
+    // handler.next(error);
   }
 
   /// 开启日志打印

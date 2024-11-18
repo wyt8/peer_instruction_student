@@ -44,17 +44,18 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
           const Row(
             children: [
               Text('登录',
-                  style: TextStyle(fontSize: 24, color: Color(0xff181818)))
+                  style: TextStyle(fontSize: 24, color: Color(0xff181818), fontWeight: FontWeight.w700))
             ],
           ),
           const SizedBox(height: 18),
           TextField(
             keyboardType: TextInputType.emailAddress,
             controller: _emailController,
+            autocorrect: true,
             style: const TextStyle(
-                fontSize: 14,
+                fontSize: 16,
                 color: Color(0xff181818),
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w700,
                 height: 24 / 14),
             decoration: const InputDecoration(
               labelText: '邮箱',
@@ -67,9 +68,9 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
             controller: _passwordController,
             keyboardType: TextInputType.visiblePassword,
             style: const TextStyle(
-                fontSize: 14,
+                fontSize: 16,
                 color: Color(0xff181818),
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w700,
                 height: 24 / 14),
             decoration: InputDecoration(
                 labelText: '密码',
@@ -123,7 +124,7 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
                   style: TextStyle(
                       fontSize: 24,
                       color: Color(0xfffdfdfd),
-                      fontWeight: FontWeight.w500))),
+                      fontWeight: FontWeight.w700))),
           const SizedBox(height: 18),
           RichText(
               text: TextSpan(
