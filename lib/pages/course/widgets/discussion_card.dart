@@ -55,19 +55,23 @@ class DiscussionCard extends StatelessWidget {
                     children: [
                       Text(
                         discussionTitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.black),
                       ),
                       const SizedBox(height: 5),
-                      Text(
-                        discussionContent,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: true,
-                        style: const TextStyle(
-                            fontSize: 14, color: Color(0xFF181818)),
+                      Expanded(
+                        child: Text(
+                          discussionContent,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          style: const TextStyle(
+                              fontSize: 14, color: Color(0xFF181818)),
+                        ),
                       ),
                       const SizedBox(height: 5),
                       Row(
