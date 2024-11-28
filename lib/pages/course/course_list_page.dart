@@ -2,7 +2,6 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:peer_instruction_student/apis/course_api.dart';
-import 'package:peer_instruction_student/common/global.dart';
 import 'package:peer_instruction_student/models/course/course.dart';
 import 'package:peer_instruction_student/pages/course/widgets/course_card.dart';
 import 'package:peer_instruction_student/states/local_user.dart';

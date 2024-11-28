@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:peer_instruction_student/common/global.dart';
 import 'package:peer_instruction_student/models/class/class.dart';
 import 'package:peer_instruction_student/models/class/class_list.dart';

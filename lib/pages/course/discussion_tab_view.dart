@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:peer_instruction_student/apis/discussion_api.dart';
 import 'package:peer_instruction_student/models/discussion/discussion.dart';
 import 'package:peer_instruction_student/pages/course/widgets/discussion_card.dart';
+import 'package:peer_instruction_student/widgets/empty,dart';
 import 'package:toastification/toastification.dart';
 
 class DiscussionTabView extends StatefulWidget {
@@ -151,60 +152,90 @@ class _DiscussionTabViewState extends State<DiscussionTabView> {
   }
 
   List<Discussion> _discussions = [];
+  bool _isLoading = false;
 
   Future<void> _getDiscussions() async {
+    if (_isLoading) {
+      return;
+    }
+    setState(() {
+      _isLoading = true;
+    });
     var res = await DiscussionApi().getDiscussions(widget.courseId, 0, 10);
     if (res.isSuccess && mounted) {
       setState(() {
         _discussions = res.data.discussions;
+        _isLoading = false;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddDiscussionDialog(context);
-        },
-        backgroundColor: const Color(0xff4C6ED7),
-        foregroundColor: Colors.white,
-        shape: const CircleBorder(),
-        child: const Icon(Icons.add),
-      ),
-      body: RefreshIndicator(
-        onRefresh: _getDiscussions,
-        child: ListView.builder(
-            controller: ScrollController(),
-            itemCount: _discussions.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  child: DiscussionCard(
-                    discussionId: _discussions[index].discussionId,
-                    discussionTitle: _discussions[index].discussionTitle,
-                    discussionContent: _discussions[index].discussionContent,
-                    createdTime: _discussions[index].createdTime,
-                    posterAvatar: _discussions[index].poster.userAvatar,
-                    onTap: () {
-                      GoRouter.of(context).push(
-                          '/course/${widget.courseId}/discussion/${_discussions[index].discussionId}',
-                          extra: {
-                            'discussion_title':
-                                _discussions[index].discussionTitle,
-                            'discussion_content':
-                                _discussions[index].discussionContent,
-                            'created_time': _discussions[index].createdTime,
-                            'poster_avatar':
-                                _discussions[index].poster.userAvatar,
-                            'poster_name': _discussions[index].poster.userName,
-                          });
-                    },
-                  ));
-            }),
-      ),
+    return Stack(
+      children: [
+        Positioned.fill(
+            child: RefreshIndicator(
+                onRefresh: _getDiscussions,
+                child: Builder(builder: (context) {
+                  if (_isLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  // if (_discussions.isEmpty) {
+                  //   return const Empty();
+                  // }
+
+                  return ListView.builder(
+                      controller: ScrollController(),
+                      itemCount: _discussions.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            child: DiscussionCard(
+                              discussionId: _discussions[index].discussionId,
+                              discussionTitle:
+                                  _discussions[index].discussionTitle,
+                              discussionContent:
+                                  _discussions[index].discussionContent,
+                              createdTime: _discussions[index].createdTime,
+                              posterAvatar:
+                                  _discussions[index].poster.userAvatar,
+                              onTap: () {
+                                GoRouter.of(context).push(
+                                    '/course/${widget.courseId}/discussion/${_discussions[index].discussionId}',
+                                    extra: {
+                                      'discussion_title':
+                                          _discussions[index].discussionTitle,
+                                      'discussion_content':
+                                          _discussions[index].discussionContent,
+                                      'created_time':
+                                          _discussions[index].createdTime,
+                                      'poster_avatar':
+                                          _discussions[index].poster.userAvatar,
+                                      'poster_name':
+                                          _discussions[index].poster.userName,
+                                    });
+                              },
+                            ));
+                      });
+                }))),
+        Positioned(
+          right: 50,
+          bottom: 50,
+          child: FloatingActionButton(
+            onPressed: () {
+              _showAddDiscussionDialog(context);
+            },
+            backgroundColor: const Color(0xff4C6ED7),
+            foregroundColor: Colors.white,
+            shape: const CircleBorder(),
+            child: const Icon(Icons.add),
+          ),
+        ),
+      ],
     );
   }
 }

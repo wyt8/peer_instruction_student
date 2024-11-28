@@ -46,7 +46,7 @@ class RegisterPage extends StatelessWidget {
           showProgressBar: false,
           autoCloseDuration: const Duration(seconds: 3),
           alignment: Alignment.topCenter,
-          title: const Text('邮箱验证码错误'),
+          title: Text(res.msg),
           type: ToastificationType.error,
         );
       }

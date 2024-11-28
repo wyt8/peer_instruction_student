@@ -174,6 +174,7 @@ class _DiscussionPageState extends State<DiscussionPage> {
           title: const Text('回复成功'),
           type: ToastificationType.success,
         );
+        _getReviews();
         _textEditingController.clear();
         _foucusNode.unfocus();
       } else {

@@ -113,7 +113,6 @@ class BaseRequest {
         options: options,
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress);
-
     return response.data;
   }
 }

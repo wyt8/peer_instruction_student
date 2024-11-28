@@ -45,10 +45,13 @@ class UserApi {
         "password": password
       }
     );
-
-    var res = Result<User>.fromJson(json, (json) => User.fromJson(json));
-    res.data.email = email;
-    return res;
+    if(json["code"] == 0) {
+      var res = Result<User>.fromJson(json, (json) => User.fromJson(json));
+      res.data.email = email;
+      return res;
+    } else {
+      return Result<User>.fromJson(json, (json) => User());
+    }
   }
 
   Future<Result<User>> register(String email, String verifyCode, String password) async {
@@ -63,9 +66,13 @@ class UserApi {
       }
     );
 
-    var res = Result<User>.fromJson(json, (json) => User.fromJson(json));
-    res.data.email = email;
-    return res;
+    if(json["code"] == 0) {
+      var res = Result<User>.fromJson(json, (json) => User.fromJson(json));
+      res.data.email = email;
+      return res;
+    } else {
+      return Result<User>.fromJson(json, (json) => User());
+    }
   }
 
   Future<bool> sendVerifyCode(String email) async {
@@ -94,8 +101,12 @@ class UserApi {
       }
     );
 
-    var res = Result<User>.fromJson(json, (json) => User.fromJson(json));
-    res.data.email = email;
-    return res;
+    if(json["code"] == 0) {
+      var res = Result<User>.fromJson(json, (json) => User.fromJson(json));
+      res.data.email = email;
+      return res;
+    } else {
+      return Result<User>.fromJson(json, (json) => User());
+    }
   }
 }

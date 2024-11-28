@@ -131,15 +131,19 @@ class _StatisticTabViewState extends State<StatisticTabView> {
                   const SizedBox(height: 20),
                   ChartCard(
                     firstAccuracies: _courseStatistic?.classStatistics
-                            .map((item) =>
-                                (item.firstRightNum * 100 / item.exerciseNum)
+                            .map((item) => item.exerciseNum == 0
+                                ? 0
+                                : (item.firstRightNum * 100 / item.exerciseNum)
                                     .round())
                             .toList() ??
                         List.empty(),
                     secondAccuracies: _courseStatistic?.classStatistics
-                            .map((item) =>
-                                (item.secondRightNum * 100 / item.exerciseNum)
-                                    .round())
+                            .map((item) => (item.exerciseNum == 0
+                                    ? 0
+                                    : item.secondRightNum *
+                                        100 /
+                                        item.exerciseNum)
+                                .round())
                             .toList() ??
                         List.empty(),
                   ),

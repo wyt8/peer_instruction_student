@@ -22,6 +22,7 @@ class DiscussionApi {
 
   Future<Result<DiscussionList>> getDiscussions(
       int courseId, int lastDiscussionId, int num) async {
+    BaseRequest().openLog(requestBody: true, responseBody: true);
     var json = await BaseRequest().request("/courses/$courseId/discussions",
         queryParameters: {"last_discussion_id": lastDiscussionId, "num": num});
     var res = Result<DiscussionList>.fromJson(

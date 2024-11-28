@@ -14,8 +14,9 @@ class MessageApi {
 
   Future<NoticeList> getMessageList(int lastNoticeId, int num) async {
     var userId = Global.user.userId;
-    var result = await BaseRequest().request("/students/${userId ?? 0}/notices",
-        queryParameters: {"last_notice_id": lastNoticeId, "num": num});
+    var result = await BaseRequest().request("/students/${userId ?? 0}/notices");
+        // queryParameters: {"last_notice_id": lastNoticeId, "num": num},
+        
     var res =
         Result<NoticeList>.fromJson(result, (json) => NoticeList.fromJson(json))
             .data;

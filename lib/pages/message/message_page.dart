@@ -4,6 +4,7 @@ import 'package:peer_instruction_student/apis/message_api.dart';
 import 'package:peer_instruction_student/models/message/notice.dart';
 import 'package:peer_instruction_student/pages/message/widgets/message_tile.dart';
 import 'package:peer_instruction_student/utils/datetime_formatter.dart';
+import 'package:peer_instruction_student/widgets/empty,dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({super.key});
@@ -139,8 +140,6 @@ class _MessagePageState extends State<MessagePage> {
         });
   }
 
-  late EasyRefreshController _controller;
-
   final List<Notice> _notices = [];
   int _lastNoticeId = 0;
   final int _num = 30;
@@ -148,16 +147,32 @@ class _MessagePageState extends State<MessagePage> {
   @override
   void initState() {
     super.initState();
-    _controller = EasyRefreshController(
-      controlFinishRefresh: true,
-      controlFinishLoad: true,
-    );
+    _getMessageList();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
+  }
+
+  // bool _isLoading = false;
+
+  Future<void> _getMessageList() async {
+    // if (_isLoading) {
+    //   return;
+    // }
+    // setState(() {
+    //   _isLoading = true;
+    // });
+
+    _lastNoticeId = 0;
+    var res = await MessageApi().getMessageList(_lastNoticeId, _num);
+    setState(() {
+      _notices.clear();
+      _notices.addAll(res.notices);
+      _lastNoticeId = _notices.last.noticeId;
+      // _isLoading = false;
+    });
   }
 
   @override
@@ -171,67 +186,32 @@ class _MessagePageState extends State<MessagePage> {
         titleTextStyle:
             const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
       ),
-      body: EasyRefresh(
-          controller: _controller,
-          header: const MaterialHeader(),
-          footer: const MaterialFooter(),
-          refreshOnStart: true,
-          refreshOnStartHeader: BuilderHeader(
-            triggerOffset: 70,
-            clamping: true,
-            position: IndicatorPosition.above,
-            processedDuration: Duration.zero,
-            builder: (ctx, state) {
-              if (state.mode == IndicatorMode.inactive ||
-                  state.mode == IndicatorMode.done) {
-                return const SizedBox();
-              }
-              return Container(
-                padding: const EdgeInsets.only(bottom: 100),
-                width: double.infinity,
-                height: state.viewportDimension,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(),
-              );
-            },
-          ),
-          onRefresh: () async {
-            _lastNoticeId = 0;
-            var res = await MessageApi().getMessageList(_lastNoticeId, _num);
-            setState(() {
-              _notices.clear();
-              _notices.addAll(res.notices);
-              _lastNoticeId = _notices.last.noticeId;
-            });
-            _controller.finishRefresh();
-            _controller.resetFooter();
-          },
-          onLoad: () async {
-            var res = await MessageApi().getMessageList(_lastNoticeId, _num);
-            if (!mounted) {
-              return;
-            }
-            setState(() {
-              _notices.addAll(res.notices);
-              _lastNoticeId = _notices.last.noticeId;
-            });
-            _controller.finishLoad(res.notices.isEmpty
-                ? IndicatorResult.noMore
-                : IndicatorResult.success);
-          },
-          child: ListView.builder(
-              itemCount: _notices.length,
-              itemBuilder: (context, index) {
-                return MessageTile(
-                  teacherAvatar: _notices[index].course.teacher.teacherAvatar,
-                  courseName: _notices[index].course.courseName,
-                  message: _notices[index].content,
-                  sendTime: _notices[index].sendTime,
-                  onTap: () {
-                    _showMessage(context, index);
-                  },
-                );
-              })),
+      body: RefreshIndicator(
+          onRefresh: _getMessageList,
+          child: Builder(builder: (context) {
+            // if (_isLoading) {
+            //   return const Center(
+            //     child: CircularProgressIndicator(),
+            //   );
+            // }
+            // else if (_notices.isEmpty) {
+            //   return const Empty();
+            // }
+
+            return ListView.builder(
+                itemCount: _notices.length,
+                itemBuilder: (context, index) {
+                  return MessageTile(
+                    teacherAvatar: _notices[index].course.teacher.teacherAvatar,
+                    courseName: _notices[index].course.courseName,
+                    message: _notices[index].content,
+                    sendTime: _notices[index].sendTime,
+                    onTap: () {
+                      _showMessage(context, index);
+                    },
+                  );
+                });
+          })),
     );
   }
 }

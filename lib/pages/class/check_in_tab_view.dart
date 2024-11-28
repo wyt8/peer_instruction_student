@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:peer_instruction_student/apis/class_api.dart';
+import 'package:peer_instruction_student/utils/base_request.dart';
 import 'package:toastification/toastification.dart';
 
 class CheckInTabView extends StatefulWidget {
-  const CheckInTabView({super.key});
+  const CheckInTabView({super.key, required this.courseId, required this.classId});
 
-  final int courseId = 0;
-  final int classId = 0;
+  final int courseId;
+  final int classId;
 
   @override
   State<CheckInTabView> createState() => _CheckInTabViewState();
@@ -113,6 +114,7 @@ class _CheckInTabViewState extends State<CheckInTabView>
   }
 
   void _checkIn() async {
+    // BaseRequest().openLog(requestBody: true, responseBody: true);
     var res = await ClassApi().isAttended(widget.courseId, widget.classId);
     if (mounted) {
       setState(() {

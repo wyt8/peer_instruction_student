@@ -73,7 +73,13 @@ class _ClassPageState extends State<ClassPage> with TickerProviderStateMixin {
         ),
         body: TabBarView(
           controller: _tabController,
-          children: [const CheckInTabView(), _buildExerciseTabView(context)],
+          children: [
+            CheckInTabView(
+              classId: widget.classId,
+              courseId: widget.courseId,
+            ),
+            _buildExerciseTabView(context)
+          ],
         ));
   }
 
