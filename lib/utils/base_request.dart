@@ -18,7 +18,7 @@ class BaseRequest {
   static Dio _dio = Dio();
 
   static const String _baseUrl =
-      "http://116.205.181.81:8081";
+      "https://apifoxmock.com/m1/5331430-5002107-default";
 
   BaseRequest._internal() {
     BaseOptions options = BaseOptions(

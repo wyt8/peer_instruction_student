@@ -49,7 +49,7 @@ class UserItemTile extends StatelessWidget {
                     child: const Text('确认'))
               ],
             ));
-    if (result != null && result.isNotEmpty) {
+    if (result!.isNotEmpty) {
       editHandle(itemValue, result);
     }
   }

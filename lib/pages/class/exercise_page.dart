@@ -159,7 +159,7 @@ class _ExercisePageState extends State<ExercisePage> {
                             _duration.inSeconds <= 0 || _selectedOption == -1
                                 ? null
                                 : () {
-                                    _submit(_selectedOption, _selectedOption, context);
+                                    _submit(_selectedOption, widget.index, context);
                                 },
                         child: const Text('提交',
                             style: TextStyle(
